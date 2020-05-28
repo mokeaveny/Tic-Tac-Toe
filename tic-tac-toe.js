@@ -8,17 +8,22 @@ const gameBoard = (() => {
 
 	// Getter and setter functions so the values stored inside the gameBoard can be accessed and set from other classes.
 	const getCell = function(index) {
-		return board[i];
+		return board[index];
 	}
 
-	const setCell = function(index) {
-		board[i] = "SET CELL";
+	const setCell = function(index, symbol) {
+		board[index] = symbol;
+	}
+
+	const getBoard = function() {
+		return board
 	}
 		
 	return {
 		newGame,
 		getCell,
-		setCell
+		setCell,
+		getBoard
 	}
 	
 })();
@@ -35,7 +40,7 @@ const displayController = (() => {
 		gameContainer = document.createElement("div");
 		gameContainer.classList.add("game-container");
 	
-	parent.append(gameContainer);
+		parent.append(gameContainer);
 
 		for(i = 0; i < 9; i++){
 			boardCell = document.createElement("div");
@@ -47,6 +52,19 @@ const displayController = (() => {
 		resetButton = document.createElement("button");
 		resetButton.textContent = "Restart Game";
 		gameContainer.append(resetButton);
+
+		// When any of the grid elements are clicked then the fillBoard function is called
+		document.querySelectorAll(".board-cell").forEach(cell => cell.addEventListener("click", gameController.fillBoard));
+		
+		// Reset function that removes the grid and the title on the page so the display is reset
+		const reset = function() {
+			parent.removeChild(titleBar);
+			parent.removeChild(gameContainer);
+			gameController.newGame()
+		}
+
+		// Add an event listener to the reset button that renders the page again and clears the values within the board array
+		resetButton.addEventListener("click", reset);
 		
 	}
 
@@ -55,7 +73,6 @@ const displayController = (() => {
 	}
 
 	return {
-		render,
 		newGame
 	}
 
@@ -67,8 +84,20 @@ const gameController = (() => {
 		displayController.newGame()
 	}
 
+	// Fill board takes the clicked target and uses it to create a paragraph element which will contain the players symbol
+	const fillBoard = (e) => {
+		currentSquare = e.target
+		textElement = document.createElement("p")
+		textElement.textContent = "X"
+		currentSquare.appendChild(textElement)
+		boardIndex = currentSquare.getAttribute("board-index")
+		gameBoard.setCell(boardIndex, textElement.textContent)
+		console.log(gameBoard.getCell(boardIndex));
+	}
+
 	return {
-		newGame
+		newGame,
+		fillBoard
 	}
 
 })();
@@ -76,21 +105,5 @@ const gameController = (() => {
 const Player = (name, symbol) => {
 
 };
-
-let board = ["", "", "", "", "", "", "", "", ""]
-
-// Fill board takes the clicked target and uses it to create a paragraph element which will contain the players symbol
-const fillBoard = (e) => {
-	currentSquare = e.target
-	textElement = document.createElement("p")
-	textElement.textContent = "X"
-	currentSquare.appendChild(textElement)
-	boardIndex = currentSquare.getAttribute("board-index")
-	board[boardIndex] = textElement.textContent
-}
-
-
-// When any of the grid elements are clicked then the fillBoard function is called
-document.querySelectorAll(".board-cell").forEach(cell => cell.addEventListener("click", fillBoard));
 
 gameController.newGame();
