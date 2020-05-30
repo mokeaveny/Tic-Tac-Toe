@@ -127,11 +127,8 @@ const displayController = (() => {
 
 	displayWin = function(message) {
 		console.log(message);
-		parent.removeChild(titleBar);
-		parent.removeChild(gameContainer);
-		parent.removeChild(playerStatus);
-		gameController.newGame();
-		gameController.switchPlayer();
+		setPlayerStatus(`${message}`)
+		document.querySelectorAll(".board-cell").forEach(cell => cell.removeEventListener("click", gameController.fillBoard));
 	}
 
 	newGame = function() {
@@ -183,7 +180,6 @@ const gameController = (() => {
 			currentSquare.appendChild(textElement)
 			gameBoard.setCell(boardIndex, textElement.textContent)
 			gameBoard.checkWin();
-			// Once the symbol has been placed then the player is swapped so that they can then make a move
 			switchPlayer()
 			displayController.setPlayerStatus(`${currentPlayer.playerName}'s Turn!`);
 		}
