@@ -44,7 +44,9 @@ const gameBoard = (() => {
 		currentPlayer = gameController.getCurrentPlayer()
 		if (board[p1] == currentPlayer.symbol && board[p2] == currentPlayer.symbol && board[p3] == currentPlayer.symbol)
 		{
-			console.log("WON");
+			// Passes the win message to the display controller that will display an element to tell them that they have won.
+			displayController.displayWin("WIN");
+			return true;
 		}
 	}
 
@@ -60,7 +62,8 @@ const gameBoard = (() => {
 		}
 
 		if(tie == true) {
-			console.log("TIE");
+			displayController.displayWin("TIE");
+			return true;
 		}
 	}
 		
@@ -78,10 +81,17 @@ const displayController = (() => {
 
 	parent = document.querySelector("body");
 
+	setPlayerStatus = function(thePlayerStatus) {
+		playerStatus.textContent = thePlayerStatus;
+	}
+
 	render = function() {
 		titleBar = document.createElement("h1");
 		titleBar.textContent = "Tic Tac Toe"
 		parent.append(titleBar);
+
+		playerStatus = document.createElement("h2");
+		parent.append(playerStatus);
 
 		gameContainer = document.createElement("div");
 		gameContainer.classList.add("game-container");
@@ -106,6 +116,7 @@ const displayController = (() => {
 		const reset = function() {
 			parent.removeChild(titleBar);
 			parent.removeChild(gameContainer);
+			parent.removeChild(playerStatus);
 			gameController.newGame()
 		}
 
@@ -114,12 +125,23 @@ const displayController = (() => {
 		
 	}
 
+	displayWin = function(message) {
+		console.log(message);
+		parent.removeChild(titleBar);
+		parent.removeChild(gameContainer);
+		parent.removeChild(playerStatus);
+		gameController.newGame();
+		gameController.switchPlayer();
+	}
+
 	newGame = function() {
 		render()
 	}
 
 	return {
-		newGame
+		newGame,
+		setPlayerStatus,
+		displayWin
 	}
 
 })();
@@ -127,16 +149,13 @@ const displayController = (() => {
 const gameController = (() => {
 	const newGame = function() {
 
-		p1 = Player("p1", "X");
-		p2 = Player("p2", "O");
+		p1 = Player("Player 1", "X");
+		p2 = Player("Player 2", "O");
 		currentPlayer = p1;
-		console.log(currentPlayer);
-
-		console.log(p1.symbol);
-		console.log(p2.symbol);
 
 		gameBoard.newGame()
 		displayController.newGame()
+		displayController.setPlayerStatus(`${currentPlayer.playerName}'s Turn!`);
 	}
 
 	const switchPlayer = function() {
@@ -166,24 +185,25 @@ const gameController = (() => {
 			gameBoard.checkWin();
 			// Once the symbol has been placed then the player is swapped so that they can then make a move
 			switchPlayer()
-			console.log(gameBoard.getCell(boardIndex));
+			displayController.setPlayerStatus(`${currentPlayer.playerName}'s Turn!`);
 		}
 	}
 
 	return {
 		newGame,
 		fillBoard,
-		getCurrentPlayer
+		getCurrentPlayer,
+		switchPlayer
 	}
 
 })();
 
 const Player = function(theName, theSymbol) {
-	name = theName;
+	playerName = theName;
 	symbol = theSymbol;
 	
 	return {
-		name,
+		playerName,
 		symbol
 	}
 };
