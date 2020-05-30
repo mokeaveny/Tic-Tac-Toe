@@ -1,3 +1,8 @@
+body {
+	margin-left: 40%;
+	background-color: #C0C0C0;
+}
+
 .game-container {
 	display: grid;
 	grid-template-columns: repeat(3, auto);
@@ -8,10 +13,11 @@
 .board-cell {
 	width: 100px;
 	height: 100px;
-	border: 1px solid #333333;
+	border: 3px solid #333333;
 	cursor: pointer;
 	line-height: 100px;
 	font-size: 40px;
+	background-color: white;
 }
 
 .board-cell p {
@@ -19,4 +25,19 @@
 	display: flex;
 	justify-content: center;
 	align-content: center;
+}
+
+.reset-button {
+	margin-top: 2%;
+	margin-left: 7.5%;
+	font-size: 16px;
+}
+
+h1 {
+	margin-left: 6%;
+}
+
+h2 {
+	margin-left: 6%;
+	margin-right: 6%;
 }

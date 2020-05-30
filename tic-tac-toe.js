@@ -114,7 +114,8 @@ const displayController = (() => {
 		
 		resetButton = document.createElement("button");
 		resetButton.textContent = "Restart Game";
-		gameContainer.append(resetButton);
+		resetButton.classList.add("reset-button");
+		parent.append(resetButton);
 
 		// When any of the grid elements are clicked then the fillBoard function is called
 		document.querySelectorAll(".board-cell").forEach(cell => cell.addEventListener("click", gameController.fillBoard));
@@ -124,6 +125,7 @@ const displayController = (() => {
 			parent.removeChild(titleBar);
 			parent.removeChild(gameContainer);
 			parent.removeChild(playerStatus);
+			parent.removeChild(resetButton);
 			gameController.newGame()
 		}
 
