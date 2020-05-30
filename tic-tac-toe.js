@@ -21,23 +21,31 @@ const gameBoard = (() => {
 
 	const checkWin = function () {
 		// Checks top row
-		compareBoardSymbols(0, 1, 2);
+		check1 = compareBoardSymbols(0, 1, 2);
 		// Checks middle row
-		compareBoardSymbols(3, 4, 5);
+		check2 = compareBoardSymbols(3, 4, 5);
 		// Checks boottom row
-		compareBoardSymbols(6, 7, 8);
+		check3 = compareBoardSymbols(6, 7, 8);
 		// Checks first column
-		compareBoardSymbols(0, 3, 6);
+		check4 = compareBoardSymbols(0, 3, 6);
 		// Checks second column
-		compareBoardSymbols(1, 4, 7);
+		check5 = compareBoardSymbols(1, 4, 7);
 		// Checks third column
-		compareBoardSymbols(2, 5, 8);
+		check6 = compareBoardSymbols(2, 5, 8);
 		// Checks diagonal, top left to bottom right
-		compareBoardSymbols(0, 4, 8);
+		check7 = compareBoardSymbols(0, 4, 8);
 		// Checks diagonal, top right to bottom left
-		compareBoardSymbols(2, 4, 6);
+		check8 = compareBoardSymbols(2, 4, 6);
 
-		checkTie();
+		if (check1 == true || check2 == true || check3 == true || check4 == true || check5 == true || check6 == true || check7 == true || check8 == true) {
+			return true;
+		}
+
+		determineTie = checkTie();
+		if (determineTie == true)
+		{
+			return "tie";
+		}
 	}
 
 	const compareBoardSymbols = function(p1, p2, p3) {
@@ -62,7 +70,6 @@ const gameBoard = (() => {
 		}
 
 		if(tie == true) {
-			displayController.displayWin("TIE");
 			return true;
 		}
 	}
@@ -179,9 +186,19 @@ const gameController = (() => {
 			textElement.textContent = currentPlayer.symbol;
 			currentSquare.appendChild(textElement)
 			gameBoard.setCell(boardIndex, textElement.textContent)
-			gameBoard.checkWin();
+			endGame = gameBoard.checkWin();
+			console.log(endGame);
 			switchPlayer()
 			displayController.setPlayerStatus(`${currentPlayer.playerName}'s Turn!`);
+			if (endGame == true)
+			{
+				switchPlayer()
+				displayController.setPlayerStatus(`${currentPlayer.playerName} Wins!`);
+			}
+			else if (endGame == "tie")
+			{
+				displayController.setPlayerStatus("Tie");
+			}
 		}
 	}
 
